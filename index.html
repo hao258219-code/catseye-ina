@@ -74,6 +74,10 @@ p{margin:0}
 .btn.solid{background:var(--brick);color:#fff;border-radius:999px;border-bottom:0;box-shadow:0 10px 24px -12px rgba(163,52,46,.7)}
 .btn.solid:hover{background:var(--brick-2)}
 .btn-note{margin-top:14px;text-align:center;font-size:13px;color:var(--ink-2)}
+.dl-line{margin-top:8px;text-align:center;font-size:14px;font-weight:900;color:var(--brick)}
+.dl-text .num{font-size:1.6em;line-height:1;margin-inline:2px}
+.btn.closed,.hd a.go.closed{pointer-events:none;background:#EEE9E2;color:var(--ink-3);border-bottom-color:var(--line);box-shadow:none}
+.btn.closed svg,.hd a.go.closed svg{display:none}
 
 /* HERO */
 .hero{padding-block:56px 40px}
@@ -234,6 +238,7 @@ p{margin:0}
 <div class="cta">
 <a class="btn" href="https://docs.google.com/forms/d/e/1FAIpQLSdJ8VUJ7AFJHV6GHWu2lpCMjCroLGtlzlcN8WaSsLe1wDVJ8g/viewform" rel="noopener" target="_blank">参加フォームはこちら<svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.6" viewbox="0 0 24 24"><path d="M5 19L19 5M8 5h11v11"></path></svg></a>
 <p class="btn-note"><span class="pw">女性 2,000円 ／ 飲み放題・軽食付き</span></p>
+<div class="dl-line"><span class="dl-text">受付締切 10/30(金) 23:59</span></div>
 </div>
 </div>
 </section>
@@ -244,8 +249,8 @@ p{margin:0}
 <p class="cap"><span class="pw">写真・カードは企画のイメージです。</span></p>
 </div>
 <div class="status wrap rv">
-<div class="row"><b>女性参加者募集中</b><span class="left">残り<span class="num remain-n">3</span>名</span></div>
-<small>定員に達し次第、受付終了</small>
+<div class="row"><b class="st-label">女性参加者募集中</b><span class="left">残り<span class="num remain-n">1</span>名</span></div>
+<small><span class="dl-text">受付締切 10/30(金) 23:59</span><br/>定員に達し次第、受付終了</small>
 </div>
 <section class="sec intro">
 <div class="wrap">
@@ -344,8 +349,8 @@ p{margin:0}
 <p class="eyebrow"><span class="pw">「ちょっと気になる」</span><span class="pw">が<span class="cm">、</span></span><span class="pw">はじまり。</span></p>
 <h2 class="h2 rv"><span class="pw">今度はあなたが</span><br/><span class="pw">物語の参加者に。</span></h2>
 <p class="body rv"><span class="pw">黒猫を探していたはずが</span><br/><span class="pw">気になる人を見つけているかもしれない。</span></p>
-<p class="recruit rv"><span class="pw">女性参加者募集中　残り</span><span class="num remain-n">3</span>名</p>
-<p class="recruit-sub"><span class="pw">定員に達し次第<span class="cm">、</span></span><span class="pw">受付終了</span></p>
+<p class="recruit rv"><span class="st-label"><span class="pw">女性参加者募集中</span></span><span class="left">　残り<span class="num remain-n">1</span>名</span></p>
+<div class="recruit-sub"><span class="dl-text">受付締切 10/30(金) 23:59</span><br/>定員に達し次第、受付終了</div>
 <div class="cta">
 <a class="btn solid" href="https://docs.google.com/forms/d/e/1FAIpQLSdJ8VUJ7AFJHV6GHWu2lpCMjCroLGtlzlcN8WaSsLe1wDVJ8g/viewform" rel="noopener" target="_blank">参加フォームはこちら<svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.6" viewbox="0 0 24 24"><path d="M5 19L19 5M8 5h11v11"></path></svg></a>
 </div>
@@ -363,14 +368,42 @@ p{margin:0}
 </footer>
 <div class="bar" id="bar">
 <div class="in">
-<div class="info"><b>女性 2,000円</b><span>募集中・残り<span class="remain-n">3</span>名</span></div>
+<div class="info"><b>女性 2,000円</b><span class="bar-st">残り<span class="remain-n">1</span>名・<span class="dl-short">10/30締切</span></span></div>
 <a class="btn" href="https://docs.google.com/forms/d/e/1FAIpQLSdJ8VUJ7AFJHV6GHWu2lpCMjCroLGtlzlcN8WaSsLe1wDVJ8g/viewform" rel="noopener" target="_blank">参加フォームはこちら<svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.6" viewbox="0 0 24 24"><path d="M5 19L19 5M8 5h11v11"></path></svg></a>
 </div>
 </div>
 <script>
 /* ===== 残り人数はここだけ変更 ===== */
-const REMAIN = 3;
+const REMAIN = 1;
 document.querySelectorAll(".remain-n").forEach(el => el.textContent = REMAIN);
+
+/* ===== 受付締切：10/30(金) 23:59（日本時間）===== */
+const DEADLINE = new Date("2026-10-30T23:59:00+09:00");
+const jstDay = d => { const s = new Date(d.getTime() + 9 * 3600e3); return Date.UTC(s.getUTCFullYear(), s.getUTCMonth(), s.getUTCDate()); };
+function updateDeadline(){
+  const now = new Date();
+  const closed = now >= DEADLINE;
+  const days = Math.round((jstDay(DEADLINE) - jstDay(now)) / 864e5);
+  let long, short;
+  if (closed){ long = "受付は終了しました"; short = "受付終了"; }
+  else if (days === 0){ long = "本日 23:59 受付締切"; short = "本日締切"; }
+  else { long = `受付締切まで あと<span class="num">${days}</span>日（10/30(金) 23:59）`; short = `締切まであと${days}日`; }
+  document.querySelectorAll(".dl-text").forEach(el => el.innerHTML = long);
+  document.querySelectorAll(".dl-short").forEach(el => el.textContent = short);
+  if (closed){
+    document.querySelectorAll(".st-label").forEach(el => el.textContent = "受付終了");
+    document.querySelectorAll(".left, .bar-st .remain-n").forEach(el => el.hidden = true);
+    document.querySelectorAll(".status small, .recruit-sub").forEach(el => el.innerHTML = "たくさんのご応募ありがとうございました。");
+    document.querySelectorAll('a[href*="docs.google.com/forms"]').forEach(a => {
+      a.removeAttribute("href"); a.classList.add("closed"); a.setAttribute("aria-disabled", "true");
+      const svg = a.querySelector("svg"); a.textContent = "受付は終了しました"; if (svg) a.append(svg);
+    });
+    document.querySelectorAll(".bar-st").forEach(el => el.textContent = "受付終了");
+  }
+}
+updateDeadline();
+setInterval(updateDeadline, 30000);
+document.addEventListener("visibilitychange", () => { if (!document.hidden) updateDeadline(); });
 
 document.documentElement.classList.add("js");
 const rv = document.querySelectorAll(".rv");
